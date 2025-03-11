@@ -45,6 +45,48 @@ impl Ticket {
     pub fn status(&self) -> &String {
         &self.status
     }
+
+    // Mutable setters with validation
+    pub fn set_title(&mut self, title: String) {
+        Self::validate_title(&title);
+        self.title = title;
+    }
+
+    pub fn set_description(&mut self, description: String) {
+        Self::validate_description(&description);
+        self.description = description;
+    }
+
+    pub fn set_status(&mut self, status: String) {
+        Self::validate_status(&status);
+        self.status = status;
+    }
+
+    // Private validation helper methods
+    fn validate_title(title: &str) {
+        if title.is_empty() {
+            panic!("Title cannot be empty");
+        }
+        if title.len() > 50 {
+            panic!("Title cannot be longer than 50 bytes");
+        }
+    }
+
+    fn validate_description(description: &str) {
+        if description.is_empty() {
+            panic!("Description cannot be empty");
+        }
+        if description.len() > 500 {
+            panic!("Description cannot be longer than 500 bytes");
+        }
+    }
+
+    fn validate_status(status: &str) {
+        const ALLOWED: &[&str] = &["To-Do", "In Progress", "Done"];
+        if !ALLOWED.contains(&status) {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+    }
 }
 
 #[cfg(test)]
